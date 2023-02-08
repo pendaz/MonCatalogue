@@ -1,11 +1,15 @@
 <!--affichage du tableau-->
 
 <div class="container">
-    <div class="card">
+<ng-template #errors>
+    <div class="text-danger">{{errorMessage}}</div>
+</ng-template>       
+    
+    <div class="card" *ngIf="produits; else errors">
         <div class="card-header">List Produits</div>
        <div class="card-body">
-    <table>
-        <thead>
+    <table class="table table-bordered border-primary">
+        <thead class="table-dark">
             <tr>
                 <th>Id</th>
                 <th>Name</th>
@@ -13,11 +17,16 @@
                 
             </tr>
         </thead>
-        <tbody>
+        <tbody class="">
             <tr *ngFor="let p of produits">
                 <td>{{p.id}}</td>
                 <td>{{p.name}}</td>
                 <td>{{p.price}}</td>
+            <td>
+                <button (click)="HandleDeleteProduits(p)" class="btn-danger">
+                    <i class="bi bi-trash">  </i>
+                </button>
+            </td>
             </tr>
         </tbody>
     </table>

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { findIndex, observable } from 'rxjs';
+import { Produit } from '../models/produits.models';
+import { ProduitsService } from '../services/produits.service';
 
 @Component({
   selector: 'app-produits',
@@ -8,19 +11,50 @@ import { Component, OnInit } from '@angular/core';
 export class ProduitsComponent implements OnInit {
 
 
-produits!: Array<any>;
+produits! : Array<Produit>;
+errorMessage!:string
+// injection du service avec comme type la classe ServiceProduits
+  constructor(private produitsService : ProduitsService) { }
 
-  constructor() { }
-
-  ngOnInit(): void {
-    // initialise le tableau
-    this.produits = [
-      {id: 1 , name: " computer", price: 25000},
-      {id: 2 , name: " printer", price: 75000},
-      {id: 3 , name: " phone", price: 5000},
-      {id: 4 , name: " desktop", price: 35000},
-      {id: 5 , name: " came", price: 45000},
-    ];
+ 
+    // asynchrone avec appel ala methode  getAll qui va me retouner un objet
+    //de type observable, je fais un subscribe vers cette observer
+    // des que la donner arrive je la recupere et la stocke dans produits
+     
+    ngOnInit(): void { // ngOninit se charge de recharger les produits
+    this.handleGetAllProduits();
   }
+  handleGetAllProduits(){
+    this.produitsService.getAllProduits().subscribe({
+      next : (data : any[]) =>{
+       return this.produits = data;
+      },
+      error : (err)=> {
+ this.errorMessage=err;
+      }
+    
+     });
+  }
+  
+  
+  HandleDeleteProduits(p: Produit){
+    //let index = this.produits.indexOf(p);
+    //this.produits.splice(index,1);
+    let conf = confirm ("Are you sure to delete");
+    if (conf==false) return;
+  this.produitsService.deleteProduit(p.id).subscribe({
+    next : (data)=> {
+      //this.handleGetAllProduits();
+      let index= this.produits.indexOf(p)
+      this.produits.splice(index,1);
+    },
+  })
+
+
+
+
+  }
+
+
 
 }
