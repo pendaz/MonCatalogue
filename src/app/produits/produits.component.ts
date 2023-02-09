@@ -49,12 +49,13 @@ errorMessage!:string
       this.produits.splice(index,1);
     },
   })
-
-
-
-
   }
 
-
+public setPromotion(id:number){
+  let produit = this.produits.find(p=>p.id==id);
+  if (produit !=undefined){
+    produit.promotion =! produit.promotion
+  }
+}
 
 }
