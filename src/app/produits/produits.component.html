@@ -1,44 +1,60 @@
 <!--affichage du tableau-->
 
 <div class="container">
-<ng-template #errors>
-    <div class="text-danger">{{errorMessage}}</div>
-</ng-template>       
-    
-    <div class="card" *ngIf="produits; else errors">
-        <div class="card-header">List Produits</div>
-       <div class="card-body">
-    <table class="table table-bordered border-primary">
+  <ng-template #errors>
+    <div class="text-danger">{{ errorMessage }}</div>
+  </ng-template>
+
+  <div class="card" *ngIf="produits; else errors">
+    <div class="card-header">List Produits</div>
+    <div class="card-body">
+      <form [formGroup]="searchFormGroup" (ngSubmit)="handleSearchProduits()">
+        <div class="input-group">
+          <label class="input-group-text">keyword:</label>
+          <input type="text" class="form-control" formControlName="keyword" />
+          <button class="btn btn-info">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+
+      <table class="table table-bordered border-primary">
         <thead class="table-dark">
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Price</th>
-                
-            </tr>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Price</th>
+          </tr>
         </thead>
         <tbody class="">
-            <tr *ngFor="let p of produits">
-                <td>{{p.id}}</td>
-                <td>{{p.name}}</td>
-                <td>{{p.price}}</td>
-                <td>
-                    <i *ngIf="p.promotion==true" class="bi bi-heart-fill text-success"></i>
-                </td>
-                <td> 
-                    <button (click)="handleSetpromotion"  [ngClass]="p.promotion==true? 'btn-danger' :'btn-success'" class="btn  ">
-                    <span *ngIf="p.promotion==true">Promo Off</span>
-                    <span *ngIf="p.promotion==false">Promo On</span>
-                </button></td>
+          <tr *ngFor="let p of produits">
+            <td>{{ p.id }}</td>
+            <td>{{ p.name }}</td>
+            <td>{{ p.price }}</td>
             <td>
-                <button (click)="HandleDeleteProduits(p)" class="btn-danger">
-                    <i class="bi bi-trash">  </i>
-                </button>
+              <i
+                *ngIf="p.promotion == true"
+                class="bi bi-heart-fill text-success"
+              ></i>
             </td>
-            </tr>
+            <td>
+              <button
+                (click)="handleSetPromotion(p)"
+                [ngClass]="p.promotion == true ? 'btn-danger' : 'btn-success'"
+                class="btn"
+              >
+                <span *ngIf="p.promotion == true">Promo Off</span>
+                <span *ngIf="p.promotion == false">Promo On</span>
+              </button>
+            </td>
+            <td>
+              <button (click)="HandleDeleteProduits(p)" class="btn-danger">
+                <i class="bi bi-trash"> </i>
+              </button>
+            </td>
+          </tr>
         </tbody>
-    </table>
-       </div>
-       
+      </table>
     </div>
+  </div>
 </div>
